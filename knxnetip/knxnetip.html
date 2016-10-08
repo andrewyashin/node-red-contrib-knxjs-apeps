@@ -1,0 +1,142 @@
+<!--
+
+  KNX nodes for IBM's Node-Red
+  https://bitbucket.org/ekarak/node-red-contrib-knxjs
+  (c) 2016, Elias Karakoulakis <elias.karakoulakis@gmail.com>
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+
+-->
+<script type="text/x-red" data-template-name="knx-controller">
+  <div class="form-row">
+    <label for="node-config-input-conntype"><i class="icon-bookmark"></i>Conn type</label>
+    <select id="node-config-input-conntype">
+      <option value="multicast" selected="true">Routing (multicast)</option>
+      <option value="unicast">Tunneling (unicast)</option>
+    </select><br/>
+    Use multicast when on the same LAN as your KNXnet/IP router.<br/>
+    If you are using eibd, make sure that its running with the &quot;-R&quot; flag.
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-ipAddr"><i class="icon-bookmark"></i>IP address</label>
+    <input type="text" id="node-config-input-ipAddr">
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-ipPort"><i class="icon-bookmark"></i>IP port</label>
+    <input type="text" id="node-config-input-ipPort">
+  </div>
+</script>
+
+<script type="text/x-red" data-template-name="knx-out">
+  <div class="form-row">
+    <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name">
+  </div>
+  	<div class="form-row">
+    <label for="node-input-controller"><i class="icon-bookmark"></i>Connection</label>
+    <input type="text" id="node-input-controller">
+  </div>
+</script>
+
+<script type="text/x-red" data-template-name="knx-in">
+  <div class="form-row">
+    <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name">
+  </div>
+  	<div class="form-row">
+    <label for="node-input-controller"><i class="icon-bookmark"></i>Connection</label>
+    <input type="text" id="node-input-controller">
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="knx-out">
+  <p>An output node for KNX. Use this to <b>send</b> KNX telegrams.<br/>
+  	<b>msg.topic</b> can be:
+    <ul>
+  	<li>'read': to send a read request to the bus</li>
+  	<li>'respond': to send a response to another read request to the bus</li>
+  	<li>'write': (<b>default</b>) to write a value to the bus. Can be omitted.</li>
+  	<br/>
+  	<b>msg.payload</b> must be a JavaScript object or a string in JSON format
+  	(when doing 'write' requests): {"dstgad":"1/2/3", "value":"1", "dpt":"DPT1.001"}
+  	<li>dstgad: the destination <b>group</b> address (eg."1/2/3")</li>
+  	<li>value: the actual value to send (eg."1")</li>
+  	<li>dpt: the datapoint type (eg."DPT1.001")</li>
+    </ul>
+  </p>
+</script>
+
+<script type="text/x-red" data-help-name="knx-in">
+    <p>KNX input node. Use this to <b>inject</b> flows from KNX events<br/>
+   	<b>msg.topic</b> will be:
+    <ul>
+    	<li>'read': when a read request arrives on the bus</li>
+    	<li>'respond': when another KNX device responds to a read request on the bus</li>
+    	<li>'write': when somebody writes a value to a KNX group address.</li>
+    	<br/>
+    	<b>msg.payload</b> will have the format: {width: X, value: Y}
+    	<li>srcphy: source <b>physical</b> address (eg.'1.1.100')</li>
+    	<li>dstgad: destination <b>group</b> address (eg.'1/2/3')</li>
+    	<li>value: the actual value received</li>
+    	<li>width: the width in <b>bits</b> of the payload</li>
+    <ul>
+    </p>
+</script>
+
+<script type="text/javascript">
+	RED.nodes.registerType('knx-controller', {
+		category: 'config',
+		defaults: {
+      conntype: {value:"multicast",  required:true},
+			ipAddr:   {value:"224.0.23.12",required:true},
+			ipPort:   {value:3671,	       required:true,	validate:RED.validators.number()}
+		},
+		label: function() {
+			return "knx@"+this.ipAddr+":"+this.ipPort;
+		}
+	});
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('knx-out',{
+      category: 'output',
+      color: '#00cc00',
+      defaults: {
+        name:      {value:""},
+        controller:{value:"", type:"knx-controller"}
+      },
+      inputs: 1,
+      outputs: 0,
+      icon: "knx.png",
+      label: function() {
+        return(this.groupaddr||this.name||"knx");
+      }
+    });
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('knx-in',{
+      category: 'input',
+      color: '#00cc00',
+      defaults: {
+        name:      {value:""},
+        controller:  {value:"", type:"knx-controller"}
+      },
+      inputs: 0,
+      outputs: 1,
+      icon: "knx.png",
+      label: function() {
+          return(this.groupaddr||this.name||"knx");
+      }
+    });
+</script>

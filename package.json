@@ -1,0 +1,35 @@
+{
+  "name": "node-red-contrib-knxjs",
+  "version": "0.0.1",
+  "description": "KNX nodes for NodeRed with multicast support",
+  "dependencies": {
+    "knx": ">=1.0.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@bitbucket.org:ekarak/node-red-contrib-knxjs.git"
+  },
+  "author": {
+    "name": "Elias Karakoulakis",
+    "email": "elias.karakoulakis@gmail.com"
+  },
+  "keywords": [
+    "node-red"
+  ],
+  "node-red": {
+    "nodes": {
+      "knx": "knxnetip/knxnetip.js"
+    }
+  },
+  "bugs": {
+    "url": "https://bitbucket.org/ekarak/node-red-contrib-knxjs/issues"
+  },
+  "main": "knxnetip/knxnetip.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "license": "Apache-2.0",
+  "readme": "KNX nodes for node-red. Uses the KNXnet/IP library for Node.JS (https://www.npmjs.com/package/knx)",
+  "readmeFilename": "README.md",
+  "homepage": "https://bitbucket.org/ekarak/node-red-contrib-knxjs/"
+}
