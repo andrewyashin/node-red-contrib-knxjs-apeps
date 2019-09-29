@@ -1,10 +1,17 @@
 1. install nodejs and npm
- - sudo apt-get install nodejs
+ sudo apt-get install nodejs
 
 2. install node-red using npm
- - sudo npm install -g --unsafe-perm node-red
+ sudo npm install -g --unsafe-perm node-red
+ node-red
+ cd ~/.node-red/node_modules
+ sudo npm i @node-red/util
+ sudo npm i knx
 
 3. copy knx project to node-red modules
- - sudo cp ~/Desktop/node-red-contrib-knxjs-apeps/node-red-contrib-knxjs-apeps ~/.node-red/node_modules
+ sudo cp -r ~/Desktop/node-red-knx-diploma/node-red-contrib-knxjs-apeps ~/.node-red/node_modules/node-red-contrib-knxjs-apeps
 
 4. import existing flow or create new one
+ - after importing flow - you have to configure knx-controller ip addresses
+
+5. flow configuration - https://flows.nodered.org/node/node-red-contrib-knxjs
