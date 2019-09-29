@@ -32,7 +32,7 @@
   "main": "knxnetip/knxnetip.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "jshint knxnetip/knxnetip.js knx-device/knx-device.js"
+    "lint": "jshint knxnetip/knxnetip.js knx-device/knx-device.js knx.js"
   },
   "license": "Apache-2.0",
   "homepage": "https://github.com/andrewyashin/node-red-contrib-knxjs-apeps/issues/"

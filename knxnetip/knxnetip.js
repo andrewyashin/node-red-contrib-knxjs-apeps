@@ -53,12 +53,11 @@ module.exports = function(RED) {
     this.config = config;
     this.config.ipAddr = this.config.ipAddr || '224.0.23.12';
     this.config.ipPort = this.config.ipPort || 3671;
-    this.config.physAddr = this.config.physAddr || '15.15.15';
     /**
      * Initialize an KNX connection
      */
     node.log(util.format('Initializing connection to %s:%d, physical addr: %s',
-      this.config.ipAddr, this.config.ipPort, this.config.physAddr));
+      this.config.ipAddr, this.config.ipPort));
 
     // get a closure for this instance
     this.notificationClosure = notificationHandler.bind(this);
@@ -72,12 +71,11 @@ module.exports = function(RED) {
     this.connection = knx.Connection({
       ipAddr: this.config.ipAddr,
       ipPort: this.config.ipPort,
-      physAddr: this.config.physAddr,
       handlers: {
         connected: function() {
           node.log(util.format(
             'KNX: successfully connected to %s:%d as %s',
-            node.config.ipAddr, node.config.ipPort, node.config.physAddr));
+            node.config.ipAddr, node.config.ipPort));
           var status = {
             fill: "green",
             text: "connected",

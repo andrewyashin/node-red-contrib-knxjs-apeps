@@ -1,0 +1,301 @@
+[
+    {
+        "id": "e4936c5a.472c5",
+        "type": "tab",
+        "label": "Flow 2",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "d081bb83.2cb358",
+        "type": "knx-in",
+        "z": "e4936c5a.472c5",
+        "name": "",
+        "controller": "739ae785.24b478",
+        "x": 650,
+        "y": 100,
+        "wires": [
+            [
+                "157ba103.6dd98f",
+                "b51aa8d9.e26098"
+            ]
+        ]
+    },
+    {
+        "id": "b51aa8d9.e26098",
+        "type": "debug",
+        "z": "e4936c5a.472c5",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 830,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "e81559f9.1b11d8",
+        "type": "knx-out",
+        "z": "e4936c5a.472c5",
+        "name": "lightning",
+        "controller": "739ae785.24b478",
+        "x": 460,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "62b8232.0298cdc",
+        "type": "inject",
+        "z": "e4936c5a.472c5",
+        "name": "off",
+        "topic": "write",
+        "payload": "{\"dstgad\":\"0/1/0\",\"value\":\"0\",\"dpt\":\"1\"}",
+        "payloadType": "json",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 170,
+        "y": 60,
+        "wires": [
+            [
+                "e81559f9.1b11d8"
+            ]
+        ]
+    },
+    {
+        "id": "15c327fb.952ed8",
+        "type": "inject",
+        "z": "e4936c5a.472c5",
+        "name": "on",
+        "topic": "write",
+        "payload": "{\"dstgad\":\"0/1/0\",\"value\":\"1\",\"dpt\":\"1\"}",
+        "payloadType": "json",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 170,
+        "y": 100,
+        "wires": [
+            [
+                "e81559f9.1b11d8"
+            ]
+        ]
+    },
+    {
+        "id": "83a5dfb.e90322",
+        "type": "knx-out",
+        "z": "e4936c5a.472c5",
+        "name": "lightning_status",
+        "controller": "739ae785.24b478",
+        "x": 360,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "7481b300.3d7fbc",
+        "type": "inject",
+        "z": "e4936c5a.472c5",
+        "name": "status",
+        "topic": "read",
+        "payload": "{\"dstgad\":\"0/1/1\",\"dpt\":\"1\"}",
+        "payloadType": "json",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 130,
+        "y": 300,
+        "wires": [
+            [
+                "83a5dfb.e90322"
+            ]
+        ]
+    },
+    {
+        "id": "52ba5aeb.e49b84",
+        "type": "knx-out",
+        "z": "e4936c5a.472c5",
+        "name": "temperature",
+        "controller": "739ae785.24b478",
+        "x": 330,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "aba2dd9b.698dc",
+        "type": "inject",
+        "z": "e4936c5a.472c5",
+        "name": "temperature",
+        "topic": "read",
+        "payload": "{\"dstgad\":\"0/2/0\",\"dpt\":\"2\"}",
+        "payloadType": "json",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 150,
+        "y": 520,
+        "wires": [
+            [
+                "52ba5aeb.e49b84"
+            ]
+        ]
+    },
+    {
+        "id": "623099e8.f6f138",
+        "type": "http response",
+        "z": "e4936c5a.472c5",
+        "name": "webpage",
+        "statusCode": "",
+        "headers": {},
+        "x": 640,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "ae97fff0.aafea",
+        "type": "http in",
+        "z": "e4936c5a.472c5",
+        "name": "",
+        "url": "/status",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 110,
+        "y": 360,
+        "wires": [
+            [
+                "47ae2dfc.8447c4"
+            ]
+        ]
+    },
+    {
+        "id": "47ae2dfc.8447c4",
+        "type": "function",
+        "z": "e4936c5a.472c5",
+        "name": "toKNXDataStatus",
+        "func": "msg.payload={\"dstgad\":\"0/1/1\",\"dpt\":\"1\"}\nglobal.set('request', msg);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 300,
+        "y": 360,
+        "wires": [
+            [
+                "83a5dfb.e90322"
+            ]
+        ]
+    },
+    {
+        "id": "157ba103.6dd98f",
+        "type": "function",
+        "z": "e4936c5a.472c5",
+        "name": "create http response",
+        "func": "var newMsg = global.get('request')\nnewMsg.payload = msg.payload\n//return [msg, newMsg];\nreturn newMsg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 660,
+        "y": 200,
+        "wires": [
+            [
+                "2da0a8cf.33b988"
+            ]
+        ]
+    },
+    {
+        "id": "2da0a8cf.33b988",
+        "type": "template",
+        "z": "e4936c5a.472c5",
+        "name": "page template",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "device id: {{payload.dstgad}} <br>\nknx response type: {{payload.type}} <br>\nknx device value: {{payload.value}} <br>",
+        "output": "str",
+        "x": 660,
+        "y": 280,
+        "wires": [
+            [
+                "623099e8.f6f138"
+            ]
+        ]
+    },
+    {
+        "id": "f85fdbca.1bd628",
+        "type": "http in",
+        "z": "e4936c5a.472c5",
+        "name": "",
+        "url": "/on",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 100,
+        "y": 160,
+        "wires": [
+            [
+                "1081eb9a.abd714"
+            ]
+        ]
+    },
+    {
+        "id": "1081eb9a.abd714",
+        "type": "function",
+        "z": "e4936c5a.472c5",
+        "name": "toKNXDataON",
+        "func": "msg.payload = {\"dstgad\":\"0/1/0\",\"value\":\"1\",\"dpt\":\"1\"}\nglobal.set('request', msg);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 260,
+        "y": 160,
+        "wires": [
+            [
+                "e81559f9.1b11d8"
+            ]
+        ]
+    },
+    {
+        "id": "8029b93f.3847d8",
+        "type": "http in",
+        "z": "e4936c5a.472c5",
+        "name": "",
+        "url": "/off",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 90,
+        "y": 200,
+        "wires": [
+            [
+                "47989e57.3455b"
+            ]
+        ]
+    },
+    {
+        "id": "47989e57.3455b",
+        "type": "function",
+        "z": "e4936c5a.472c5",
+        "name": "toKNXDataOFF",
+        "func": "msg.payload = {\"dstgad\":\"0/1/0\",\"value\":\"0\",\"dpt\":\"1\"}\nglobal.set('request', msg);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 240,
+        "y": 200,
+        "wires": [
+            [
+                "e81559f9.1b11d8"
+            ]
+        ]
+    },
+    {
+        "id": "739ae785.24b478",
+        "type": "knx-controller",
+        "z": "",
+        "ipAddr": "192.168.0.161",
+        "ipPort": "3671"
+    }
+]
