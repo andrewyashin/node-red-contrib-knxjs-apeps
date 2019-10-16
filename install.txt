@@ -7,6 +7,9 @@
  cd ~/.node-red/node_modules
  sudo npm i @node-red/util
  sudo npm i knx
+ sudo npm install --no-audit --no-update-notifier --save --save-prefix="~" --production node-red-contrib-simplejs@0.0.4
+ sudo npm install --no-audit --no-update-notifier --save --save-prefix="~" --production node-red-contrib-knx@0.8.2
+
 
 3. copy knx project to node-red modules
  sudo cp -r ~/Desktop/node-red-knx-diploma/node-red-contrib-knxjs-apeps ~/.node-red/node_modules/node-red-contrib-knxjs-apeps
