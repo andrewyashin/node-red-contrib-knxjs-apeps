@@ -1,0 +1,133 @@
+<html>
+<head>
+<script src="jquery-3.4.1.js"></script>
+</head>
+<body>
+  <div class="split left">
+      <div class="centered">
+    <div id="temperature">
+    22 °C
+  </div>
+</div>
+
+  </div>
+
+	
+<div class="split right">
+
+      <div class="centered">
+
+        </div>
+
+
+</div>
+
+
+</body>
+<script type="text/javascript">
+	$(document).ready(function(){
+  $.ajax({
+  	url: "http://127.0.0.1:1880/temp",
+  	cache: false,
+  	method: "GET",
+  	dataType: 'json',
+  	success: function (data, textStatus) {
+            $('#temperature').html(data.value + ' °C');
+            console.log(data)
+        }})});
+
+  function statusLoad(){
+    $.ajax({
+      url: "http://127.0.0.1:1880/status",
+      cache: false,
+      method: "GET",
+      dataType: 'json',
+      success: function (data, textStatus) {
+          if (data.value === "0") {
+            $('.right').css('background-image', 'off.jpg');
+          } 
+
+          if (data.value === "1") {
+            $('.right').css('background-image', 'on.jpg');
+          }
+
+          return data.value;
+          console.log(data)
+        }})}
+
+  function on() {
+  $.ajax({
+    url: "http://127.0.0.1:1880/on",
+    cache: false,
+    method: "GET",
+    dataType: 'json',
+    success: function (data, textStatus) {
+      $('.right').css('background-image', 'on.jpg');
+        console.log(data)
+    }})}
+
+  function off() {
+  $.ajax({
+    url: "http://127.0.0.1:1880/off",
+    cache: false,
+    method: "GET",
+    dataType: 'json',
+    success: function (data, textStatus) {
+        $('.right').css('background-image', 'off.jpg');
+      console.log(data)
+    }})}
+
+  $(document).ready(statusLoad());
+
+  $(".right").click(function(){
+    if (statusLoad() === 0) {
+      on();
+    } else {
+      off();
+    }
+  });
+
+
+</script>
+<style type="text/css">
+.split {
+  color: yellow;
+  font-size: 100pt;
+  height: 100%;
+  width: 50%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+/* Control the left side */
+.left {
+  left: 0;
+  background-image: url(weather.jpg);
+  background-size: cover;
+}
+
+/* Control the right side */
+.right {
+  right: 0;
+  background-image: url(on.jpg);
+  background-size: cover;
+}
+
+/* If you want the content centered horizontally and vertically */
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+/* Style the image inside the centered container, if needed */
+.centered img {
+  width: 150px;
+  border-radius: 50%;
+}</style>
+</html>
